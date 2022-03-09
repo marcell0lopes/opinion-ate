@@ -2,31 +2,21 @@ import { createStore } from "vuex";
 import { mount } from "@vue/test-utils";
 import RestaurantList from "@/components/RestaurantList";
 
+const findByTestId = (wrapper, testId, index) => {
+  return wrapper.findAll(`[data-testid="${testId}"]`).at(index);
+};
+
 describe("RestaurantList", () => {
-  it("loads restaurants on mount", () => {
-    const restaurantsModule = {
-      namespaced: true,
-      actions: {
-        load: jest.fn().mockName("load"),
-      },
-    };
+  const records = [
+    { id: 1, name: "Sushi Place" },
+    { id: 2, name: "Pizza Place" },
+  ];
 
-    const store = createStore({
-      modules: { restaurants: restaurantsModule },
-    });
+  let restaurantsModule;
+  let wrapper;
 
-    mount(RestaurantList, { global: { plugins: [store] } });
-
-    expect(restaurantsModule.actions.load).toHaveBeenCalled();
-  });
-
-  it("displays the restaurants", () => {
-    const records = [
-      { id: 1, name: "Sushi Place" },
-      { id: 2, name: "Pizza Place" },
-    ];
-
-    const restaurantsModule = {
+  beforeEach(() => {
+    restaurantsModule = {
       namespaced: true,
       state: { records },
       actions: {
@@ -34,26 +24,22 @@ describe("RestaurantList", () => {
       },
     };
 
-    const store = new createStore({
+    const store = createStore({
       modules: {
         restaurants: restaurantsModule,
       },
     });
 
-    const wrapper = mount(RestaurantList, { global: { plugins: [store] } });
+    wrapper = mount(RestaurantList, { global: { plugins: [store] } });
+  });
 
-    const firstRestaurantName = wrapper
-      .findAll('[data-testid="restaurant"]')
-      .at(0)
-      .text();
+  it("loads restaurants on mount", () => {
+    expect(restaurantsModule.actions.load).toHaveBeenCalled();
+  });
 
-    expect(firstRestaurantName).toBe("Sushi Place");
+  it("displays the restaurants", () => {
+    expect(findByTestId(wrapper, "restaurant", 0).text()).toBe("Sushi Place");
 
-    const secondRestaurantName = wrapper
-      .findAll('[data-testid="restaurant"]')
-      .at(1)
-      .text();
-
-    expect(secondRestaurantName).toBe("Pizza Place");
+    expect(findByTestId(wrapper, "restaurant", 1).text()).toBe("Pizza Place");
   });
 });

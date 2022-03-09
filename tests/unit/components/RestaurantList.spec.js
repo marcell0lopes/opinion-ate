@@ -1,3 +1,5 @@
+import Vuetify from "vuetify";
+import Vue from "vue";
 import { createStore } from "vuex";
 import { mount } from "@vue/test-utils";
 import RestaurantList from "@/components/RestaurantList";
@@ -7,6 +9,8 @@ const findByTestId = (wrapper, testId, index) => {
 };
 
 describe("RestaurantList", () => {
+  Vue.use(Vuetify);
+
   const records = [
     { id: 1, name: "Sushi Place" },
     { id: 2, name: "Pizza Place" },
@@ -24,13 +28,14 @@ describe("RestaurantList", () => {
       },
     };
 
+    const vuetify = new Vuetify();
     const store = createStore({
       modules: {
         restaurants: restaurantsModule,
       },
     });
 
-    wrapper = mount(RestaurantList, { global: { plugins: [store] } });
+    wrapper = mount(RestaurantList, { global: { plugins: [store, vuetify] } });
   });
 
   it("loads restaurants on mount", () => {

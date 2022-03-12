@@ -51,4 +51,11 @@ describe("RestaurantList", () => {
       true,
     );
   });
+
+  it("don't display the loading indicator after loading", () => {
+    mountWithStore({ loading: false });
+    expect(wrapper.find('[data-testid="loading-indicator"]').exists()).toBe(
+      false,
+    );
+  });
 });

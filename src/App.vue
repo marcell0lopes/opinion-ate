@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-app-bar color="green" dense shaped>
-      <v-toolbar-title>Opinion Ate</v-toolbar-title>
+      <v-toolbar-title class="font-weight-medium text-white">
+        Opinion Ate
+      </v-toolbar-title>
     </v-app-bar>
     <v-content>
       <v-container>
